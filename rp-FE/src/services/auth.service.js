@@ -3,17 +3,28 @@ import api from './api';
 
 export const authService = {
   async register(userData) {
-    const response = await api.post('/auth/register', userData);
-    return response.data;
+    try {
+      const response = await api.post('/auth/register', userData);
+      console.log('Register response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Register error details:', error.response || error);
+      throw error;
+    }
   },
 
   async login(credentials) {
-    const response = await api.post('/auth/login', credentials);
-    if (response.data.token) {
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+    try {
+      const response = await api.post('/auth/login', credentials);
+      if (response.data.token) {
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+      }
+      return response.data;
+    } catch (error) {
+      console.error('Login error details:', error.response || error);
+      throw error;
     }
-    return response.data;
   },
 
   logout() {
