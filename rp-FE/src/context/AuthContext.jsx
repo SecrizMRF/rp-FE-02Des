@@ -19,7 +19,9 @@ export const AuthProvider = ({ children }) => {
       const data = await authService.register(userData);
       return { success: true, data };
     } catch (error) {
-      return { success: false, error: error.response?.data?.message || 'Registration failed' };
+      const errorMsg = error.response?.data?.message || error.message || 'Registration failed';
+      console.error('Auth error:', error);
+      return { success: false, error: errorMsg };
     }
   };
 
