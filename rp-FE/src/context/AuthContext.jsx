@@ -14,6 +14,15 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
+  const register = async (userData) => {
+    try {
+      const data = await authService.register(userData);
+      return { success: true, data };
+    } catch (error) {
+      return { success: false, error: error.response?.data?.message || 'Registration failed' };
+    }
+  };
+
   const login = async (credentials) => {
     try {
       const data = await authService.login(credentials);
@@ -30,7 +39,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, loading, register, login, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );
